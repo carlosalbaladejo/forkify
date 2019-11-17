@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Oceanic Next (dimmed bg)",
+    "workbench.colorCustomizations": {
+        "statusBar.background": "#333333",
+        "statusBar.noFolderBackground": "#333333",
+        "statusBar.debuggingBackground": "#263238"
+      },
+}
