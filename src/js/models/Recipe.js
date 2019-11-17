@@ -11,8 +11,8 @@ export default class Recipe {
         `https://forkify-api.herokuapp.com/api/get?rId=${this.id}`
       );
       this.title = res.data.recipe.title;
-      this.img = res.data.image_url;
-      this.author = res.data.publisher;
+      this.img = res.data.recipe.image_url;
+      this.author = res.data.recipe.publisher;
       this.url = res.data.recipe.source_url;
       this.ingredients = res.data.recipe.ingredients;
     } catch (error) {
@@ -22,7 +22,7 @@ export default class Recipe {
 
   calcTime() {
     // Assuming 15 mins for each 3 ingredients
-    const numIng = this.ingredients.range;
+    const numIng = this.ingredients.length;
     const periods = Math.ceil(numIng / 3);
     this.time = periods * 15;
   }
@@ -54,6 +54,7 @@ export default class Recipe {
       "cup",
       "pound"
     ];
+    const units = [...unitsShort, "kg", "g"];
     const newIngredients = this.ingredients.map(el => {
       // 1) Uniform units
       let ingredient = el.toLowerCase();
@@ -62,7 +63,7 @@ export default class Recipe {
       });
 
       // 2) Remove parenthesis
-      ingredient.replace(/ *\([^)]*\) */g, " ");
+      ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
       // 3) Parse ingredients into count, unit and ingredient
       const arrIng = ingredient.split(" ");
       const unitIndex = arrIng.findIndex(el2 => units.includes(el2));

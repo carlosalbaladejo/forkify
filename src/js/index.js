@@ -2,6 +2,7 @@
 import Search from "./models/Search";
 import Recipe from "./models/Recipe";
 import * as searchView from "./views/searchView";
+import * as recipeView from "./views/recipeView";
 import { elements, renderLoader, clearLoader } from "./views/base";
 
 /** Global state of the app
@@ -29,15 +30,15 @@ const controlSearch = async () => {
     renderLoader(elements.searchRes);
 
     try {
-        // 4) Search for recipes
-        await state.search.getResults();
-    
-        // 5) Render the results on UI
-        clearLoader();
-        searchView.renderResults(state.search.result);
+      // 4) Search for recipes
+      await state.search.getResults();
+
+      // 5) Render the results on UI
+      clearLoader();
+      searchView.renderResults(state.search.result);
     } catch (error) {
-        alert ('Error fetching recipes');
-        clearLoader();
+      alert("Error fetching recipes");
+      clearLoader();
     }
   }
 };
@@ -65,22 +66,27 @@ const controlRecipe = async () => {
   const id = window.location.hash.replace("#", "");
   if (id) {
     // Prepare UI for changes
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
 
     // Create new recipe object
     state.recipe = new Recipe(id);
 
     try {
-        // Get recipe data
-        await state.recipe.getRecipe();
-        state.recipe.parseIngredients();
-    
-        // Calculate serving and time
-        state.recipe.calcServings();
-        state.recipe.calcTime();
-    
-        // Render recipe
+      // Get recipe data
+      await state.recipe.getRecipe();
+      state.recipe.parseIngredients();
+
+      // Calculate serving and time
+      state.recipe.calcServings();
+      state.recipe.calcTime();
+
+      // Render recipe
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
     } catch (error) {
-        alert('Error processing recipe!');
+        console.error(error);
+      alert("Error processing recipe!");
     }
   }
 };
